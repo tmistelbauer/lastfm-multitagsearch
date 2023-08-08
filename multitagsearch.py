@@ -13,10 +13,9 @@ url += "&limit=10000" # doesn't seem to have any effect
 
 tag_result = []
 
-# Add results of each individual search in a list and append it to tag_result
 for tag in tags:
-    url += "&tag=" + tag
-    response = requests.get(url)
+    url_tag = url + "&tag=" + tag
+    response = requests.get(url_tag)
     artists = response.json()["topartists"]["artist"]
     subresult = []
     for artist in artists:
@@ -25,13 +24,13 @@ for tag in tags:
 
 result = []
 
-# Go through all lists and intersect them
 for i in range(len((tag_result))):
-    # If result is still empty, fill it with the first tag list:
     if i == 0:
         result = tag_result[i]
     elif i < len(tag_result):
-        result = list(set(result) & set(tag_result[i]))
+        result = list(set(result).intersection(set(tag_result[i])))
 
 print(str(len(result)) + " artists found!")
-print(result)
+
+for artist in result:
+    print(artist)
